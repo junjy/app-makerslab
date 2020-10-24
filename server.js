@@ -1,0 +1,75 @@
+// ====== DEPENDENCIES ======
+require('dotenv').config();
+const express = require('express')
+const methodOverride = require('method-override')
+const mongoose = require('mongoose')
+const app = express();
+const port = 5000;
+
+// see env variables
+// console.log(process.env);
+// console.log(process.env.DB_USER);
+
+// ====== MONGOOSE ======
+
+// const mongoURI = 'mongodb://localhost:27017/biscoff_bakery'
+
+//updated connection string
+// const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
+
+// mongoose.set('useFindAndModify', false)
+
+
+// ====== IMPORT ======
+const productsController = require('./controllers/ProductsController');
+
+
+// ====== EXPRESS SETUP ======
+
+// sets template engine to use
+app.set('view engine', 'ejs')
+
+// tells Express app where to find our static assets
+app.use(express.static('public'))
+
+// tells Express app to make use of the imported method-override library
+app.use(methodOverride('_method'))
+
+// tells Express app to parse incoming form requests,
+// and make it available in req.body
+app.use(express.urlencoded({
+  extended: true
+}))
+
+// ====== ROUTES ======
+
+// index route
+app.get('/products', productsController.listProducts)
+
+// new route
+
+// show route
+
+// create route
+
+// edit route
+
+// update route
+
+// delete route
+
+
+
+// ====== LISTENER ======
+// mongoose.connect( mongoURI, { useNewUrlParser: true, useUnifiedTopology: true } )
+//   .then(response => {
+//     // DB connected successfully
+//     console.log('DB connection successful')
+
+    app.listen(port, () => {
+      console.log(`Biscoff Bakery app listening on port: ${port}`)
+    })
+//   })
+//   .catch(err => {
+//     console.log(err)
+//   })
