@@ -50,15 +50,19 @@ app.get('/products', productsController.listProducts)
 app.get('/products/new', productsController.newProduct)
 
 // show route
-app.get('/products/:slug', productsController.showProduct)
+app.get('/products/:id', productsController.showProduct)
 
-// create route
+// // create route
+app.post('/products', productsController.createProduct)
 
-// edit route
+// // edit route
+app.get('/products/:id/edit', productsController.editProduct)
 
-// update route
+// // update route
+app.patch('/products/:id', productsController.updateProduct)
 
-// delete route
+// // delete route
+app.delete('/products/:id', productsController.deleteProduct)
 
 
 

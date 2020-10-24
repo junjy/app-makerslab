@@ -1,9 +1,19 @@
 <%- include('../partials/header'); %>
 
+<div class="container">
     <article>
         <p><img src="<%= item.image %>" /></p>
         <p>Name: <%= item.name %></p>
-        <p>Price: <%= item.price %></p>
+        <p>Price: $<%= item.price %></p>
     </article>
 
+    <a class="btn btn-primary" href="/products/<%= itemIndex %>/edit">EDIT</a> 
+
+    <form method="POST" action="/products/<%= itemIndex %>?_method=DELETE"> 
+        <button type="submit" class="btn btn-danger">DELETE</button>
+    </form>
+
+</div>
+
 <%- include('../partials/footer'); %>
+
