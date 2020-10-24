@@ -12,12 +12,9 @@ const port = 5000;
 
 // ====== MONGOOSE ======
 
-// const mongoURI = 'mongodb://localhost:27017/biscoff_bakery'
+const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
 
-//updated connection string
-// const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
-
-// mongoose.set('useFindAndModify', false)
+mongoose.set('useFindAndModify', false)
 
 
 // ====== IMPORT ======
@@ -43,12 +40,17 @@ app.use(express.urlencoded({
 
 // ====== ROUTES ======
 
+// redirect main index to products
+app.get('', productsController.redirectToMain)
+
 // index route
 app.get('/products', productsController.listProducts)
 
 // new route
+app.get('/products/new', productsController.newProduct)
 
 // show route
+app.get('/products/:slug', productsController.showProduct)
 
 // create route
 
@@ -61,15 +63,15 @@ app.get('/products', productsController.listProducts)
 
 
 // ====== LISTENER ======
-// mongoose.connect( mongoURI, { useNewUrlParser: true, useUnifiedTopology: true } )
-//   .then(response => {
-//     // DB connected successfully
-//     console.log('DB connection successful')
+mongoose.connect( mongoURI, { useNewUrlParser: true, useUnifiedTopology: true } )
+  .then(response => {
+    // DB connected successfully
+    console.log('DB connection successful')
 
     app.listen(port, () => {
       console.log(`Biscoff Bakery app listening on port: ${port}`)
     })
-//   })
-//   .catch(err => {
-//     console.log(err)
-//   })
+  })
+  .catch(err => {
+    console.log(err)
+  })

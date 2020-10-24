@@ -2,7 +2,17 @@
 
 <div class="container">
 
-    
+    <ul>
+        <% products.forEach((item, idx) => { %>
+          <li>
+            <p><img src="<%= item.image %>" /></p>
+            <p><%= item.idx %></p>
+            <p><a href="/products/<%= item.idx %>"><%= item.name %></a></p>
+            <p><%= '$' + item.price %></p>
+
+          </li>
+        <% }) %>
+      </ul>
     
 </div>
 
