@@ -14,11 +14,11 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Types.Decimal128,
         required: true
     },
-    image: String,
-    product_id: {
-        type: String,
-        required: true
-    }
+    image: String
+    // product_id: {
+    //     type: String,
+    //     required: true
+    // }
     
 })
 
