@@ -1,17 +1,22 @@
 <%- include('../partials/header'); %>
 
 <div class="container">
-    <article>
-        <p><img src="<%= item.image %>" /></p>
-        <p>Name: <%= item.name %></p>
-        <p>Price: $<%= item.price %></p>
-    </article>
+    <div class="show-image">
+        <img src="<%= item.image %>" />
+    </div><br />
+    <div class="show-container">
+        <p>
+            <%# item.name %>
+            <b>Price:</b> $<%= item.price %><br />
+            <b>Description:</b> <%= item.description %>
+        </p>
+    </div>
 
-    <a class="btn btn-primary" href="/products/<%= item.slug %>/edit">EDIT</a> 
-
-    <form method="POST" action="/products/<%= item.slug %>?_method=DELETE"> 
-        <button type="submit" class="btn btn-danger">DELETE</button>
-    </form>
+    <% if (user !== null) { %>
+        <a class="btn btn-primary" href="/products/<%= item.slug %>/edit">EDIT</a> | <form method="POST" action="/products/<%= item.slug %>?_method=DELETE"> 
+            <button type="submit" class="btn btn-danger">DELETE</button>
+        </form>
+    <% } %>
 
 </div>
 

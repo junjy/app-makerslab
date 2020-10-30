@@ -1,14 +1,16 @@
 <%- include('../partials/header'); %>
 
-<div class="container">
+<div class="container" id="index-page">
 
     <%# let itemIndex = 0; %>
 
         <% products.forEach(item => { %>
-            <div class="item-container">
-                <p><img src="<%= item.image %>" /></p>
-                <p><a href="/products/<%= item.slug %>"><%= item.name %></a></p>
-                <p><%= '$' + item.price %></p>
+            <div class="index-container">
+                <p>
+                    <img src="<%= item.image %>" /><br />
+                    <a href="/products/<%= item.slug %>"><b><%= item.name %></b></a><br />
+                    <%= '$' + item.price %>
+                </p>
                 <%# itemIndex += 1 %>
             </div>
         <% }) %>

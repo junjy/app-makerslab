@@ -1,9 +1,41 @@
-body {
+body h4 {
+    text-align: center;
+
+}
+
+#index-page {
+    text-align: center;
 
 }
 
 
 img {
+    width: 750px;
+    height: 500px;
+}
+
+.index-container {
+    display: inline-block;
+    padding-right: 10px;
+    text-align: center;
+    
+}
+
+.index-container img {
     width: 300px;
     height: 200px;
+    
+}
+
+.show-container {
+    text-align: justify;
+    
+}
+
+.show-image {
+    width: 750px;
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    
 }

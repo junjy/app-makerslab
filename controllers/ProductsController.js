@@ -13,7 +13,7 @@ const controllers = {
         ProductModel.find()
         .then(results => {
             res.render('products/index', {
-                pageTitle: "List of Products",
+                pageTitle: "Our Furniture",
                 products: results
             })
         })
@@ -37,7 +37,7 @@ const controllers = {
                     return
                 }
                 res.render('products/show', {
-                    pageTitle: "Show Product",
+                    pageTitle: result.name,
                     item: result,
                 })
             })

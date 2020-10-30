@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         max: 100
     },
+    username: {
+        type: String,
+        required: true,
+        max: 20
+    },
     email: {
         type: String,
         required: true,
@@ -25,24 +30,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    addresses: [{
-        addr_line_1: {
-            type: String,
-            required: true
-        },
-        addr_line_2: String,
-        unit: String,
-        postal: {
-            type: String,
-            required: true
-        },
-        city: String,
-        state: String,
-        country: {
-            type: String,
-            required: true
-        }
-    }],
     created_at: {
         type: Date,
         required: true,

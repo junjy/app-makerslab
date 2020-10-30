@@ -107,8 +107,25 @@ const controllers = {
     },
 
     dashboard: (req, res) => {
+        // let email = req.body.email
+        // console.log(email)
+
+        // UserModel.findOne({
+        //     email: email
+        // })
+        //     .then(result => {
+        //         res.render('users/dashboard', {
+        //             pageTitle: "User Dashboard",
+        //             user: result
+        //         })
+        //     })
+        //     .catch(err => {
+        //         res.redirect('/products')
+        //     })
+
         res.render('users/dashboard', {
-            pageTitle: "User Dashboard"
+            pageTitle: "User Dashboard",
+
         })
     },
 
