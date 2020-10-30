@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 const app = express();
 const port = 5000;
 
+// ====== IMPORT ======
+const productsController = require('./controllers/ProductsController');
+
 // see env variables
 // console.log(process.env);
 // console.log(process.env.DB_USER);
@@ -15,10 +18,6 @@ const port = 5000;
 const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
 
 mongoose.set('useFindAndModify', false)
-
-
-// ====== IMPORT ======
-const productsController = require('./controllers/ProductsController');
 
 
 // ====== EXPRESS SETUP ======
@@ -50,19 +49,23 @@ app.get('/products', productsController.listProducts)
 app.get('/products/new', productsController.newProduct)
 
 // show route
-app.get('/products/:id', productsController.showProduct)
+// app.get('/products/:id', productsController.showProduct)
+app.get('/products/:slug', productsController.showProduct)
 
 // // create route
 app.post('/products', productsController.createProduct)
 
 // // edit route
-app.get('/products/:id/edit', productsController.editProduct)
+// app.get('/products/:id/edit', productsController.editProduct)
+app.get('/products/:slug/edit', productsController.editProduct)
 
 // // update route
-app.patch('/products/:id', productsController.updateProduct)
+// app.patch('/products/:id', productsController.updateProduct)
+app.patch('/products/:slug', productsController.updateProduct)
 
 // // delete route
-app.delete('/products/:id', productsController.deleteProduct)
+// app.delete('/products/:id', productsController.deleteProduct)
+app.delete('/products/:slug', productsController.deleteProduct)
 
 
 

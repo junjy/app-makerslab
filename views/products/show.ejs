@@ -7,9 +7,9 @@
         <p>Price: $<%= item.price %></p>
     </article>
 
-    <a class="btn btn-primary" href="/products/<%= itemIndex %>/edit">EDIT</a> 
+    <a class="btn btn-primary" href="/products/<%= item.slug %>/edit">EDIT</a> 
 
-    <form method="POST" action="/products/<%= itemIndex %>?_method=DELETE"> 
+    <form method="POST" action="/products/<%= item.slug %>?_method=DELETE"> 
         <button type="submit" class="btn btn-danger">DELETE</button>
     </form>
 

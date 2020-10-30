@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const furnitureModel = require('../models/furniture');
+const _ = require('lodash'); // generate slug
+// const furnitureModel = require('../models/furniture');
 const ProductModel = require('../models/products');
 
 const controllers = {
@@ -10,70 +10,148 @@ const controllers = {
     },
 
     listProducts: (req, res) => {
-        res.render('products/index', {
-            pageTitle: "List of Goods for Launch",
-            products: furnitureModel
+        ProductModel.find()
+        .then(results => {
+            res.render('products/index', {
+                pageTitle: "List of Products",
+                products: results
+            })
         })
 
+        // res.render('products/index', {
+        //     pageTitle: "List of Goods for Launch",
+        //     products: furnitureModel
+        // })
 
     },
 
     showProduct: (req, res) => {
-      let itemArrIndex = req.params.id;
+        let slug = req.params.slug
 
-        // type NaN cannot be equated using ===
-        // need to use isNaN function to get a bool value for comparison
-        if (isNaN(parseInt(itemArrIndex))) {
-            res.send('id must be a number')
-            return
-        }
-
-        if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
-            res.redirect('/products')
-        }
-
-        let item = furnitureModel[itemArrIndex];
-
-        res.render('products/show', {
-            pageTitle: "Show Product",
-            item: item,
-            itemIndex: itemArrIndex
+        ProductModel.findOne({
+            slug: slug
         })
+            .then(result => {
+                if (! result) {
+                    res.redirect('/products')
+                    return
+                }
+                res.render('products/show', {
+                    pageTitle: "Show Product",
+                    item: result,
+                })
+            })
+            .catch(err => {
+                res.send(err)
+            })
+
+
+    //   let itemArrIndex = req.params.id;
+
+    //     // type NaN cannot be equated using ===
+    //     // need to use isNaN function to get a bool value for comparison
+    //     if (isNaN(parseInt(itemArrIndex))) {
+    //         res.send('id must be a number')
+    //         return
+    //     }
+
+    //     if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
+    //         res.redirect('/products')
+    //     }
+
+    //     let item = furnitureModel[itemArrIndex];
+
+    //     res.render('products/show', {
+    //         pageTitle: "Show Product",
+    //         item: item,
+    //         itemIndex: itemArrIndex
+    //     })
 
     },
 
     editProduct: (req, res) => {
-        let itemArrIndex = req.params.id;
 
-        if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
-            res.redirect('/products');
-            return;
-        }
+        ProductModel.findOne({
+            slug: req.params.slug
+        })
+            .then(result => {
+                res.render('products/edit', {
+                    pageTitle: "Edit Form for " + result.name,
+                    item: result,
+                    itemID: result.slug
+                })
+            })
+            .catch(err => {
+                res.redirect('/products')
+            })
 
-        let item = furnitureModel[itemArrIndex];
+        // let itemArrIndex = req.params.id;
 
-        res.render('products/edit', {
-            pageTitle: "Edit Form for " + item.name,
-            item: item,
-            itemIndex: itemArrIndex
-        });
+        // if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
+        //     res.redirect('/products');
+        //     return;
+        // }
+
+        // let item = furnitureModel[itemArrIndex];
+
+        // res.render('products/edit', {
+        //     pageTitle: "Edit Form for " + item.name,
+        //     item: item,
+        //     itemIndex: itemArrIndex
+        // });
 
 
     },
 
     updateProduct: (req, res) => {
-        let itemArrIndex = req.params.id;
+        const newSlug = _.kebabCase(req.body.name)
 
-        if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
-            res.redirect('/products');
-            return;
-        }
+        // find the document in DB,
+        // to ensure that whatever the user
+        // wants to edit, is actually present
+        ProductModel.findOne(
+            {
+                slug: req.params.slug
+            }
+        )
+            .then(result => {
 
-        furnitureModel[itemArrIndex].name = req.body.name;
-        furnitureModel[itemArrIndex].price = req.body.price;
-        furnitureModel[itemArrIndex].image = req.body.image;
+                ProductModel.updateOne(
+                    {
+                        slug: req.params.slug
+                    },
+                    {
+                        name: req.body.name,
+                        slug: newSlug,
+                        price: req.body.price,
+                        image: req.body.image
+                    }
+                )
+                    .then(updateResult => {
+                        res.redirect('/products/' + newSlug)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.redirect('/products')
+                    })
+
+            })
+            .catch(err => {
+                console.log(err)
+                res.redirect('/products')
+            })
+        // let itemArrIndex = req.params.id;
+
+        // if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
+        //     res.redirect('/products');
+        //     return;
+        // }
+
+        // furnitureModel[itemArrIndex].name = req.body.name;
+        // furnitureModel[itemArrIndex].price = req.body.price;
+        // furnitureModel[itemArrIndex].image = req.body.image;
   
-        res.redirect('/products/' + itemArrIndex);
+        // res.redirect('/products/' + itemArrIndex);
 
     },
 
@@ -84,29 +162,70 @@ const controllers = {
     },
 
     createProduct: (req, res) => {
-        let newItemIndex = furnitureModel.length;
+        const slug = _.kebabCase(req.body.name)
 
-        furnitureModel.push({
-            id: newItemIndex + 1,
+        ProductModel.create({
             name: req.body.name,
+            slug: slug,
             price: req.body.price,
             image: req.body.image
         })
+            .then(result => {
+                res.redirect('/products/' + slug)
+            })
+            .catch(err => {
+                console.log(err)
+                res.redirect('/products/new')
+            })
 
-        res.redirect('/products/' + newItemIndex);
+        // let newItemIndex = furnitureModel.length;
+
+        // furnitureModel.push({
+        //     id: newItemIndex + 1,
+        //     name: req.body.name,
+        //     price: req.body.price,
+        //     image: req.body.image
+        // })
+
+        // res.redirect('/products/' + newItemIndex);
 
     },
 
     deleteProduct: (req, res) => {
-        let itemArrIndex = req.params.id;
 
-        if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
-            res.redirect('/products');
-            return;
-        }
+        ProductModel.findOne(
+            {
+                slug: req.params.slug
+            }
+        )
+            .then(result => {
 
-        furnitureModel.splice(itemArrIndex, 1);
-        res.send('deleted product');
+                ProductModel.deleteOne({
+                    slug: req.params.slug
+                })
+                    .then(deleteResult => {
+                        res.redirect('/products')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.redirect('/products')
+                    })
+
+            })
+            .catch(err => {
+                console.log(err)
+                res.redirect('/products')
+            })
+
+        // let itemArrIndex = req.params.id;
+
+        // if ( ! checkParamId(itemArrIndex, furnitureModel) ) {
+        //     res.redirect('/products');
+        //     return;
+        // }
+
+        // furnitureModel.splice(itemArrIndex, 1);
+        // res.send('deleted product');
 
 
     }
@@ -115,11 +234,11 @@ const controllers = {
 
 }
 
-function checkParamId(givenID, collection) {
-    if (givenID < 0 || givenID > collection.length - 1) {
-        return false;
-    }
-    return true;
-}
+// function checkParamId(givenID, collection) {
+//     if (givenID < 0 || givenID > collection.length - 1) {
+//         return false;
+//     }
+//     return true;
+// }
 
 module.exports = controllers;
