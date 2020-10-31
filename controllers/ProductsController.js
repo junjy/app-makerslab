@@ -124,7 +124,8 @@ const controllers = {
                         name: req.body.name,
                         slug: newSlug,
                         price: req.body.price,
-                        image: req.body.image
+                        image: req.body.image,
+                        description: req.body.description
                     }
                 )
                     .then(updateResult => {
